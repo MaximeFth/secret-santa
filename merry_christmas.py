@@ -1,6 +1,13 @@
 import argparse
 import pandas as pd
 import random
+from rich.console import Console
+import smtplib, ssl
+
+port = 587  # For starttls
+smtp_server = "smtp.gmail.com"
+sender_email = "mail@gmail.com"
+password = "password"
 
 class SecretSanta:
     def __init__(self,klaus_list, chain_number=1,blind=False):
@@ -18,8 +25,19 @@ class SecretSanta:
 
     def show_pairing(self):
         for key, value in self.giver_receiver.items() :
-            print(f"Klaus {key} will give a wunderschön gift to Klaus {value.name}")
+            console.print(f"[bold] {key:<15} -> {value.name:<15}")
+    def send_game(self):
+        for klaus in self.klaus_list:
+            message = f"""\
+                Subject: Secret_Santa
 
+                Hello {klaus.name}, you will be the secret santa of: {self.giver_receiver[klaus.name]}.
+                """
+            with smtplib.SMTP(smtp_server, port) as server:
+                server.starttls()
+                server.login(sender_email, password)
+                server.sendmail(sender_email, klaus.mail, message)
+                server.quit()
 # In a secret santa, everyone participant is a santa klaus.
 class Klaus:
     def __init__(self,name,mail,belsnickel=None):
@@ -44,10 +62,12 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
     participants = pd.read_csv("participants.csv")
+    console = Console()
     klaus_list = []
     for _, klaus in participants.iterrows():
         klaus_list.append(Klaus(klaus['name'],klaus['mail'],klaus['belsnickel']))
     secret_santa = SecretSanta(klaus_list)
     secret_santa.create_pairing()
     secret_santa.show_pairing()
+    secret_santa.send_game()
 
