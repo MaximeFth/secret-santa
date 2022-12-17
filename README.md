@@ -1,7 +1,5 @@
 # Secret-Santa in Python
 
-## Merry Christmas!
-
 This super simple python script will send to all your friends who they need to give a gift to. Note that although this script is wonderful and simple to use, the first step that is to collect your friends mail can be a pain in the ass.
 
 ### Create participants list `participants.csv`.
