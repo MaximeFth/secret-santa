@@ -23,3 +23,16 @@ To obtain your secret password, follow this [tutorial](https://stackoverflow.com
     "PASSWORD": "passwooord"
 }
 ```
+
+### `merry-christmas.py`
+```
+usage: merry_christmas.py [-h] [--send] [--blind] [--seed SEED] [--pairing PAIRING]
+
+optional arguments:
+  -h, --help         show this help message and exit
+  --send             Add this arg to send all mails.
+  --blind            Add this arg to not be spoiled
+  --seed SEED        Seed for the pairing randomness
+  --pairing PAIRING  Pairing you already computed and want to send
+```
+
