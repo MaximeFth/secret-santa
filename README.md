@@ -24,7 +24,7 @@ To obtain your secret password, follow this [tutorial](https://stackoverflow.com
 }
 ```
 
-### `merry-christmas.py`
+### `merry-christmas.py`, where the magic happens
 ```
 usage: merry_christmas.py [-h] [--send] [--blind] [--seed SEED] [--pairing PAIRING]
 
@@ -36,3 +36,7 @@ optional arguments:
   --pairing PAIRING  Pairing you already computed and want to send
 ```
 
+### Requirements
+```
+pip3 install -r requirements.txt
+```

@@ -1,0 +1,8 @@
+numpy
+pandas
+rich
+email-to
+ssl
+smtplib
+json
+pickle
