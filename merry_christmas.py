@@ -10,7 +10,8 @@ import smtplib, ssl
 class SecretSanta:
     def __init__(self,klaus_list, chain_number=1,blind=False):
         """
-        The list is shuffled wrt the seed given, because I know youll forget which seed you put in it will dumnp the pairings in a file, in case anything goes wrong...
+        The list is shuffled wrt the seed given, because I know youll forget which seed you put in it will
+        dump the pairings in a file, in case anything goes wrong...
         """
         self.klaus_list = klaus_list
         random.shuffle(klaus_list)
@@ -20,9 +21,13 @@ class SecretSanta:
         with open('pairings.pkl', 'wb') as f:
             pickle.dump(self.klaus_list, f)
 
+    def set_pairing(self,pairing):
+        self.giver_receiver = pairing
+
     def create_pairing(self):
         """
-        Creates a pairing list by taking into account the impish list. This function has been implemented by a blind donkey, and has a worst case complexity probably of O(Tree(n!)), use it with care.
+        Creates a pairing list by taking into account the impish list. This function has been implemented by
+        a blind donkey, and has a worst case complexity probably of O(Tree(n!)), use it with care.
         """
         self.giver_receiver = dict()
         for index, klaus in enumerate(self.klaus_list):
@@ -98,6 +103,8 @@ def parse_args():
     parser.add_argument('--send', action='store_true',default=False,help="Add this arg to send all mails.")
     parser.add_argument('--blind', action='store_true',default=False,help="Add this arg to not be spoiled")
     parser.add_argument('--seed', type=int,default=-1 ,help='Seed for the pairing randomness')
+    parser.add_argument('--pairing', type=str,default="",help='Pairing you already computed and want to send')
+
     results = parser.parse_args()
 
     return results
@@ -119,7 +126,13 @@ if __name__ == '__main__':
     for _, klaus in participants.iterrows():
         klaus_list.append(Klaus(klaus['name'],klaus['mail'],klaus['impish_list']))
     secret_santa = SecretSanta(klaus_list)
-    secret_santa.create_pairing()
+
+    if args.pairing != "":
+        with open(args.pairing, 'rb') as f:
+            secret_santa.set_pairing(pickle.load(f))
+    else:
+        secret_santa.create_pairing()
+
     if not args.blind:
         secret_santa.show_pairing()
         secret_santa.write_list()
